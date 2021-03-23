@@ -20,3 +20,13 @@ Route::get('/', function () {
 Route::get('/hello', function () {
     return view('welcome');
 });
+
+Route::get('/pruebas/{nombre?}', function($nombre = null){
+    $texto = '<h2>Texto desde una nueva ruta</h2>';
+    $texto .= 'Nombre: ' . $nombre;
+    return view('pruebas', array(
+        'texto' => $texto
+    ));
+});
+
+Route::get('/animales', 'PruebasController');
