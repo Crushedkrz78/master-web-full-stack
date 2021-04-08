@@ -31,3 +31,4 @@ Route::get('/pruebas/{nombre?}', function($nombre = null){
 });
 
 Route::get('/animales', [PruebasController::class, 'index']);
+Route::get('/test-orm', [PruebasController::class, 'testOrm']);
