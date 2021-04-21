@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\PruebasController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//Rutas de prueba
 Route::get('/', function () {
     return '<h1>Hola mundo con Laravel</h1>';
 });
@@ -32,3 +36,24 @@ Route::get('/pruebas/{nombre?}', function($nombre = null){
 
 Route::get('/animales', [PruebasController::class, 'index']);
 Route::get('/test-orm', [PruebasController::class, 'testOrm']);
+
+
+/**
+ * Rutas de la API
+ */
+/**
+ * Métodos HTTP comunes:
+ *  - GET: Conseguir datos o recursos.
+ *  - POST: Guardar datos o recursos o hacer lógica desde un formulario.
+ *  - PUT: Para actualizar recursos o datos.
+ *  - DELETE: Para eliminar datos o recursos.
+ */
+
+ //Rutas de prueba
+ROUTE::get('/usuario/pruebas', [UserController::class, 'pruebas']);
+ROUTE::get('/categoria/pruebas', [CategoryController::class, 'pruebas']);
+ROUTE::get('/entrada/pruebas', [PostController::class, 'pruebas']);
+
+//Rutas del controlador de usuarios
+ROUTE::post('/api/register', [UserController::class, 'register']);
+ROUTE::post('/api/login', [UserController::class, 'login']);
