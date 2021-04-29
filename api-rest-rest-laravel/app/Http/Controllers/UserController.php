@@ -43,7 +43,8 @@ class UserController extends Controller
                 // Validación evaluado correctamente
 
                 // Cifrar contraseña
-                $pwd = password_hash($params->password, PASSWORD_BCRYPT, ['cost' => 4]);
+                //$pwd = password_hash($params->password, PASSWORD_BCRYPT, ['cost' => 4]);
+                $pwd = hash('sha256', $params->password);
 
                 // Comprobar existencia de usuario ingresado (Duplicado)
 
@@ -90,7 +91,12 @@ class UserController extends Controller
         $jwtAuth = new \JwtAuth();
         //echo $jwtAuth->signup();
 
+        $email = 'test@test.com';
+        $password = '1234';
+        //$pwd = password_hash($password, PASSWORD_BCRYPT, ['cost' => 4]);
+        $pwd = hash('sha256', $password);
 
-        return $jwtAuth->signup();
+
+        return response()->json($jwtAuth->signup($email, $pwd, true));
     }
 }

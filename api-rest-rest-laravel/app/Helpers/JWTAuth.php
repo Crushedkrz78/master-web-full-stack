@@ -3,18 +3,17 @@ namespace App\Helpers;
 
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\DB;
-use App\User;
+use App\Models\User;
 
 class JwtAuth{
 
     public $key;
 
     public function __construct(){
-        $this->key = 'esto_es_una_clave_super_secreta'
-
+        $this->key = 'esto_es_una_clave_super_secreta-99887766';
     }
 
-    public function signup($email, $password, $token = null){
+    public function signup($email, $password, $getToken = null){
         // Buscar si existe el usuario con las credenciales
         $user = User::where([
             'email' => $email,
