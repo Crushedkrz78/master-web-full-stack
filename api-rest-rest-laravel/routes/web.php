@@ -57,3 +57,4 @@ ROUTE::get('/entrada/pruebas', [PostController::class, 'pruebas']);
 //Rutas del controlador de usuarios
 ROUTE::post('/api/register', [UserController::class, 'register']);
 ROUTE::post('/api/login', [UserController::class, 'login']);
+ROUTE::post('/api/user/update', [UserController::class, 'update']);
