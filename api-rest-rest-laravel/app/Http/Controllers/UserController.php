@@ -132,14 +132,54 @@ class UserController extends Controller
     }
 
     public function update(Request $request){
+
+        // Comprobar que el usuario está identificado
         $token = $request->header('Authorization');
         $jwtAuth = new \JwtAuth();
         $checkToken = $jwtAuth->checkToken($token);
 
-        if($checkToken){
-            echo "<h1>Login correcto</h1>";
+        // Recoger los datos del usuario por Post
+        $json = $request->input('json', null);
+        $params_array = json_decode($json, true);
+
+        if($checkToken && !empty($params_array)){
+
+            // Obtener usuario identificado
+            $user = $jwtAuth->checkToken($token, true);
+
+            // Validar los datos
+            $validate = \Validator::make($params_array, [
+                'name' => 'required|alpha',
+                'surname' => 'required|alpha',
+                'email' => 'required|email|unique:users'.$user->sub
+            ]);
+
+            // Quitar datos que no se necesitan actualizar
+            unset($params_array['id']);
+            unset($params_array['role']);
+            unset($params_array['password']);
+            unset($params_array['created_at']);
+            unset($params_array['remember_token']);
+
+            // Actualizar usuario en BD
+            $user_update = User::where('id', $user->sub)->update($params_array);
+
+            // Devolver Array con resultado
+            $data = array(
+                'code' => 200,
+                'status' => 'success',
+                'user' => $user,
+                'changes' => $params_array
+            );
+
         }else{
-            echo "<h1>Login INCORRECTO</h1>";
+
+            $data = array(
+                'code' => 400,
+                'status' => 'error',
+                'message' => 'El usuario no está identificado.'
+            );
         }
+        return response()->json($data, $data['code']);
     }
 }
