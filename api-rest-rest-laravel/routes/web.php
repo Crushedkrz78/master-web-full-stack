@@ -58,3 +58,4 @@ ROUTE::get('/entrada/pruebas', [PostController::class, 'pruebas']);
 ROUTE::post('/api/register', [UserController::class, 'register']);
 ROUTE::post('/api/login', [UserController::class, 'login']);
 ROUTE::put('/api/user/update', [UserController::class, 'update']);
+ROUTE::post('/api/user/upload', [UserController::class, 'upload']);
