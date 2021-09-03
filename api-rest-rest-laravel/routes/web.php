@@ -4,6 +4,7 @@ use App\Http\Controllers\PruebasController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PostController;
+use App\Http\Middleware\ApiAuthMiddleware;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -58,4 +59,4 @@ ROUTE::get('/entrada/pruebas', [PostController::class, 'pruebas']);
 ROUTE::post('/api/register', [UserController::class, 'register']);
 ROUTE::post('/api/login', [UserController::class, 'login']);
 ROUTE::put('/api/user/update', [UserController::class, 'update']);
-ROUTE::post('/api/user/upload', [UserController::class, 'upload']);
+ROUTE::post('/api/user/upload', [UserController::class, 'upload'])->middleware(ApiAuthMiddleware::class);
