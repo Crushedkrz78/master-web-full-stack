@@ -184,12 +184,26 @@ class UserController extends Controller
     }
 
     public function upload(Request $request){
-        $data = array(
-            'code' => 400,
-            'status' => 'error',
-            'message' => 'Error al cargar imagen'
-        );
+        // Recoger los datos de la petición
+        $image = $request->file('file0');
 
+        // Subir-Guardar imagen
+        if($image){
+            $image_name = time().$image->getClientOriginalName();
+            \Storage::disk('users')->put($image_name, \File::get($image));
+
+            $data = array(
+                'code' => 200,
+                'status' => 'success',
+                'image' => $image_name
+            );
+        }else{
+            $data = array(
+                'code' => 400,
+                'status' => 'error',
+                'message' => 'Error al cargar imagen'
+            );
+        }
         return response()->json($data, $data['code']);
     }
 }
