@@ -59,31 +59,42 @@ class PostController extends Controller
             // Validar los datos recibidos
             $validate = \Validator::make3($params_array,[
                 'title' => 'required',
-                'description' => 'required',
-                'category_id' => 'required'
+                'content' => 'required',
+                'category_id' => 'required',
+                'image' => 'required'
             ]);
-            // Guardar el artículo
+
             if($validate->fails()){
                 $data = [
                     'code' => 400,
-                    'status' => 'success',
+                    'status' => 'error',
                     'message' => 'No se ha guardado el post, faltan datos'
                 ];
             }else{
+                // Guardar el artículo
+                $post = new Post();
+                $post->user_id = $user->sub;
+                $post->category_id = $params->category_id;
+                $post->title = $params->title;
+                $post->content = $params->content;
+                $post->image = $params->image;
+                $post->save();
+
                 $data = [
-                    'code' => 400,
+                    'code' => 200,
                     'status' => 'success',
-                    'message' => 'No se ha guardado el post, faltan datos'
+                    'message' => $post
                 ];
             }
         }else{
             $data = [
                 'code' => 400,
-                'status' => 'success',
+                'status' => 'error',
                 'message' => 'Envía los datos correctamente'
             ];
         }
 
         // Devolver una respuesta
+        return response()->json($data, $data['code']);
     }
 }
