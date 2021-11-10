@@ -119,7 +119,7 @@ class PostController extends Controller
                 ]);
 
                 if($validate->fails()){
-                    $daya['error'] = $validate->error();
+                    $data['errors'] = $validate->errors();
                     return response()->json($data, $data['code']);
                 }
                 // Eliminar los datos que no se van a actualizar
@@ -128,14 +128,15 @@ class PostController extends Controller
                 unset($params_array['create_at']);
                 unset($params_array['user']);
 
-                // Actualziar el registro especificado
+                // Actualizar el registro especificado
                 $post = Post::where('id', $id)->update($params_array);
 
                 // Devolver una respuesta
                 $data = array(
                     'code' => 200,
                     'status' => 'success',
-                    'post' => $params_array
+                    'post' => $post,
+                    'changes' => $params_array
                 );
         }
 
