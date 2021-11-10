@@ -10,6 +10,7 @@ class Post extends Model
     use HasFactory;
 
     protected $table = 'posts';
+    protected $fillable = ['title', 'content', 'image', 'category_id'];
 
     //Relación de uno a muchos (Inversa)
     public function user(){

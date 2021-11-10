@@ -129,15 +129,26 @@ class PostController extends Controller
                 unset($params_array['user']);
 
                 // Actualizar el registro especificado
-                $post = Post::where('id', $id)->update($params_array);
+                $post = Post::find($id);
+                $post_update = Post::where('id', $id)->update($params_array);
+
+                if($post_update){
+                    $data = array(
+                        'code' => 200,
+                        'status' => 'success',
+                        'post' => $post,
+                        'changes' => $params_array
+                    );
+                }else{
+                    $data = array(
+                        'code' => 400,
+                        'status' => 'error',
+                        'message' => 'El post que intentas actualizar no existe'
+                    );
+                }
 
                 // Devolver una respuesta
-                $data = array(
-                    'code' => 200,
-                    'status' => 'success',
-                    'post' => $post,
-                    'changes' => $params_array
-                );
+
         }
 
         return response()->json($data, $data['code']);
