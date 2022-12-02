@@ -53,9 +53,8 @@ class PostController extends Controller
 
         if(!empty($params_array)){
             // Conseguir el usuario identificado
-            $jwtAuth = new JwtAuth();
-            $token = $request->header('Authorization', null);
-            $user = $jwtAuth->checkToken($token, true);
+            $user = $this->getIdentity($request);
+
             // Validar los datos recibidos
             $validate = \Validator::make3($params_array,[
                 'title' => 'required',
@@ -128,35 +127,50 @@ class PostController extends Controller
                 unset($params_array['create_at']);
                 unset($params_array['user']);
 
-                // Actualizar el registro especificado
-                $post = Post::find($id);
-                $post_update = Post::where('id', $id)->update($params_array);
+                // Conseguir usuario identificado
+                $user = $this->getIdentity($request);
 
-                if($post_update){
-                    $data = array(
-                        'code' => 200,
-                        'status' => 'success',
-                        'post' => $post,
-                        'changes' => $params_array
-                    );
+                // Búsqueda del registro especificado
+                $post = Post::find($id);
+
+                // Actualización del registro especificado
+                if(!empty($post) && is_object($post)){
+                    $post_update = Post::where('id', $id)
+                                ->where('user_id', $user->sub)
+                                ->update($params_array);
+                    if(!empty($post_update)){
+                        $data = array(
+                            'code' => 200,
+                            'status' => 'success',
+                            'original_post' => $post,
+                            'changes' => $params_array
+                        );
+                    }else{
+                        $data = array(
+                            'code' => 400,
+                            'status' => 'error',
+                            'message' => 'Imposible actualizar Post debido a que no eres propietario',
+                        );
+                    }
                 }else{
                     $data = array(
                         'code' => 400,
                         'status' => 'error',
-                        'message' => 'El post que intentas actualizar no existe'
+                        'message' => 'El post que intentas actualizar no existe',
                     );
                 }
-
-                // Devolver una respuesta
-
         }
 
         return response()->json($data, $data['code']);
     }
 
     public function destroy($id, Request $request){
+        // Obtener el usuario identificado
+        $user = $this->getIdentity($request);
+
         // Obtener el registro que se va a eliminar
-        $post = Post::find($id);
+        $post = Post::where('id', $id)
+                    ->where('user_id', $user->sub)->first();
 
         if(!empty($post)){
             // Eliminar el registro
@@ -178,6 +192,15 @@ class PostController extends Controller
         }
 
         return response()->json($data, $data['code']);
+    }
+
+    private function getIdentity($request){
+        // Conseguir usuario identificado
+        $jwtAuth = new JwtAuth();
+        $token = $request->header('Authorization', null);
+        $user = $jwtAuth->checkToken($token, true);
+
+        return $user;
     }
 
 }
