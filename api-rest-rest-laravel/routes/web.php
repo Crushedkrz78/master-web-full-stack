@@ -56,16 +56,17 @@ Route::get('/test-orm', [PruebasController::class, 'testOrm']);
 //ROUTE::get('/entrada/pruebas', [PostController::class, 'pruebas']);
 
 //Rutas del controlador de usuarios
-ROUTE::post('/api/register', [UserController::class, 'register']);
-ROUTE::post('/api/login', [UserController::class, 'login']);
-ROUTE::put('/api/user/update', [UserController::class, 'update']);
-ROUTE::post('/api/user/upload', [UserController::class, 'upload'])->middleware(ApiAuthMiddleware::class);
-ROUTE::get('/api/user/avatar/{filename}', [UserController::class, 'getImage']);
-ROUTE::get('/api/user/details/{id}', [UserController::class, 'details']);
+Route::post('/api/register', [UserController::class, 'register']);
+Route::post('/api/login', [UserController::class, 'login']);
+Route::put('/api/user/update', [UserController::class, 'update']);
+Route::post('/api/user/upload', [UserController::class, 'upload'])->middleware(ApiAuthMiddleware::class);
+Route::get('/api/user/avatar/{filename}', [UserController::class, 'getImage']);
+Route::get('/api/user/details/{id}', [UserController::class, 'details']);
 
 // Rutas del controlador de categorías
 Route::resource('api/category', CategoryController::class);
 
 // Rutas del controlador de entradas
 Route::resource('/api/post', PostController::class);
-ROUTE::post('/api/post/upload', [PostController::class, 'upload']);
+Route::post('/api/post/upload', [PostController::class, 'upload']);
+Route::get('/api/post/image/{filename}', [PostController::class, 'getImage']);

@@ -235,4 +235,29 @@ class PostController extends Controller
         return response()->json($data, $data['code']);
     }
 
+    public function getImage($filename){
+        // Comprobar si existe el archivo
+        $isset = \Storage::disk('images')->exists($filename);
+
+        if($isset){
+            // Obtener la imagen
+            $file = \Storage::disk('images')->get($filename);
+
+            // Devolver la imagen
+            return new Response($file, 200);
+        }else{
+            $data = [
+                'code' => 404,
+                'status' => 'error',
+                'message' => 'La imagen no existe'
+            ];
+        }
+
+        return response()->json($data, $data['code']);
+
+
+
+        // Mostrar posible error
+    }
+
 }
